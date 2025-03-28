@@ -1,0 +1,34 @@
+iou_lane:
+  _target_: GaussianLSS.metrics.IoUMetric
+  min_visibility: ${min_visibility}
+  key: lane
+
+iou_road_segment:
+  _target_: GaussianLSS.metrics.IoUMetric
+  min_visibility: ${min_visibility}
+  key: road_segment
+
+iou_road_divider:
+  _target_: GaussianLSS.metrics.IoUMetric
+  min_visibility: ${min_visibility}
+  key: road_divider
+
+iou_lane_divider:
+  _target_: GaussianLSS.metrics.IoUMetric
+  min_visibility: ${min_visibility}
+  key: lane_divider
+
+iou_ped_crossing:
+  _target_: GaussianLSS.metrics.IoUMetric
+  min_visibility: ${min_visibility}
+  key: ped_crossing
+
+iou_walkway:
+  _target_: GaussianLSS.metrics.IoUMetric
+  min_visibility: ${min_visibility}
+  key: walkway
+
+iou_carpark_area:
+  _target_: GaussianLSS.metrics.IoUMetric
+  min_visibility: ${min_visibility}
+  key: carpark_area

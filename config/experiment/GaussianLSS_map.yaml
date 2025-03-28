@@ -1,0 +1,16 @@
+# @package _global_
+defaults:
+  - override /model: GaussianLSSModel # GaussianLSSModel GaussianIterLSSModel
+  - override /data: nuscenes_map
+
+  - override /loss: map_loss
+  - override /metrics: map_metrics
+  - override /visualization: nuscenes_viz
+        
+data:
+  split_intrin_extrin: False
+  augment_img: True 
+  augment_bev: True
+
+val_only: False
+min_visibility: 0

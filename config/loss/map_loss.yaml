@@ -1,0 +1,48 @@
+lane_weight: 1.0
+lane:
+  _target_: GaussianLSS.losses.BinarySegmentationLoss
+
+  min_visibility: ${min_visibility}
+  key: lane
+
+road_segment_weight: 1.0
+road_segment:
+  _target_: GaussianLSS.losses.BinarySegmentationLoss
+
+  min_visibility: ${min_visibility}
+  key: road_segment
+
+road_divider_weight: 1.0
+road_divider:
+  _target_: GaussianLSS.losses.BinarySegmentationLoss
+
+  min_visibility: ${min_visibility}
+  key: road_divider
+
+lane_divider_weight: 1.0
+lane_divider:
+  _target_: GaussianLSS.losses.BinarySegmentationLoss
+
+  min_visibility: ${min_visibility}
+  key: lane_divider
+
+ped_crossing_weight: 1.0
+ped_crossing:
+  _target_: GaussianLSS.losses.BinarySegmentationLoss
+
+  min_visibility: ${min_visibility}
+  key: ped_crossing
+
+walkway_weight: 1.0
+walkway:
+  _target_: GaussianLSS.losses.BinarySegmentationLoss
+
+  min_visibility: ${min_visibility}
+  key: walkway
+
+carpark_area_weight: 1.0
+carpark_area:
+  _target_: GaussianLSS.losses.BinarySegmentationLoss
+
+  min_visibility: ${min_visibility}
+  key: carpark_area

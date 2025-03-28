@@ -18,6 +18,7 @@ log = logging.getLogger(__name__)
 CONFIG_PATH = Path.cwd() / 'config'
 CONFIG_NAME = 'config.yaml'
 
+logging.getLogger('shapely').setLevel(logging.WARNING)
 
 def maybe_resume_training(experiment):
     save_dir = Path(experiment.save_dir).resolve() 

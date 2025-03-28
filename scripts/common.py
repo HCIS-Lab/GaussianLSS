@@ -4,14 +4,13 @@ from omegaconf import OmegaConf
 import torch
 from GaussianLSS.common import setup_experiment, load_backbone
 
-def prepare_val(exp, device, CHECKPOINT_PATH=None, batch_size=1, mode='split'):
+def prepare_val(exp, device, CHECKPOINT_PATH=None, overrides=[], batch_size=1, mode='split'):
     core.global_hydra.GlobalHydra.instance().clear()    
     initialize(version_base="1.3", config_path='../config')
+    overrides = [f'+experiment={exp}'] + overrides
     cfg = compose(
         config_name='config',
-        overrides=[          
-            f'+experiment={exp}',
-        ]
+        overrides=overrides
     )
     cfg.data.dataset_dir = f".{cfg.data.dataset_dir}"
     cfg.data.labels_dir = f".{cfg.data.labels_dir}"

@@ -1,4 +1,0 @@
-iou_vehicle:
-  _target_: GaussianLSS.metrics.IoUMetric
-  min_visibility: ${min_visibility}
-  key: vehicle

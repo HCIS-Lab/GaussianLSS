@@ -63,9 +63,8 @@ def resize(src, dst=None, shape=None, idx=0):
 
 
 class NuScenesViz:
-    def __init__(self, dynamic_key=[], map_key=[], bev_h=200, bev_w=200):
-        self.dynamic_key = dynamic_key
-        self.map_key = map_key
+    def __init__(self, keys=[], bev_h=200, bev_w=200):
+        self.keys = keys
         self.bev_h = bev_h
         self.bev_w = bev_w
     
@@ -92,21 +91,21 @@ class NuScenesViz:
     def visualize_gt(self, batch, view, index):
         image = np.zeros((self.bev_h, self.bev_w, 3)).astype(np.uint8)
         image += 200
-        for i, name in enumerate(self.map_key):
-            image = self.draw_image(image, batch['map'][index, i], COLORS[name])
-        for name in self.dynamic_key:
+        for name in self.keys:
             image = self.draw_image(image, batch[name][index, 0], COLORS[name])
             
         image = self.draw_ego(image, view)
         
         return [image]
     
-    def visualize_pred(self, pred, view, index):
+    def visualize_pred(self, pred, view, index, batch):
         image = np.zeros((self.bev_h, self.bev_w, 3)).astype(np.uint8)
         image += 200
-        l = self.map_key + self.dynamic_key
-        for name in l:
-            prediction = (pred[name][index, 0].detach().sigmoid() > 0.4)
+        for name in self.keys:
+            try:
+                prediction = (pred[name][index, 0].detach().sigmoid() > 0.4)
+            except:
+                prediction = batch[name][index, 0]
             image = self.draw_image(image, prediction, COLORS[name])
 
         image = self.draw_ego(image, view)
@@ -119,7 +118,7 @@ class NuScenesViz:
         batch_size = batch['view'].shape[0]
         for b in range(min(batch_size, b_max)):
             gt_viz = self.visualize_gt(batch, view, b)
-            pred_viz = self.visualize_pred(pred, view, b)
+            pred_viz = self.visualize_pred(pred, view, b, batch)
             right = gt_viz + pred_viz
             
             for x in right:
