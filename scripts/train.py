@@ -60,6 +60,7 @@ def main(cfg):
         ModelSummary(max_depth=2),
         LearningRateMonitor(logging_interval='epoch'),
         ModelCheckpoint(
+            save_weights_only=True,
             filename='last',
             monitor ='val/metrics/mIoU',
             mode='max',

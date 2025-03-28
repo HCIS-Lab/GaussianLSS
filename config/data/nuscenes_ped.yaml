@@ -1,0 +1,19 @@
+# @package _global_
+defaults:
+  - /data/nuscenes
+
+data:
+  ped: True
+
+visualization:
+  keys: ['ped']
+
+model:
+  head:
+    outputs:
+      ped: [0, 1]
+      ped_center: [1, 2]
+      ped_offset: [2, 4]
+
+key: ped
+  

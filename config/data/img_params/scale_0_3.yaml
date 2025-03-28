@@ -1,0 +1,8 @@
+scale: [0.294, 0.308]
+zoom_lim: [0.95, 1.05]
+final_dim: [224, 480]
+rot_lim: [-2.5, 2.5]
+crop_up_pct: [0.83, 0.83]
+rand_flip: False
+H: 900
+W: 1600

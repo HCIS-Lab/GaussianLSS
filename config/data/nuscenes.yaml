@@ -1,0 +1,27 @@
+defaults:
+  - img_params: scale_0_3
+
+dataset: 'nuscenes_generated'           # do not modify :)
+# used to get_split
+version: 'v1.0-trainval'                # 'v1.0-mini' for debugging trainval
+dataset_dir: ./data/nuscenes
+labels_dir: ./data/nuscenes/labels
+
+# used to generate dataset
+cameras: [[0, 1, 2, 3, 4, 5]]
+                           
+# label parameters
+bev:
+  h: 200
+  w: 200
+  h_meters: 100.0
+  w_meters: 100.0
+  offset: 0.0
+
+# input parameters (not used in label generation)
+image:
+  h: 224 # 224
+  w: 480 # 480
+  top_crop: 46
+
+bev_aug_conf: [30.,20.,0.,20.,0.,0.]

@@ -68,8 +68,9 @@ Run visualize.ipynb to create a gif visualization like this:
 <img src="./images/predictions.gif" width="80%">
 </div>
 
-# TODO
+# TODOs
 - [ ] Add checkpoints.
+- [ ] Add det3d code.
 
 # 🙏 Acknowledgements
 This implementation is mainly based on:

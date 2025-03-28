@@ -1,0 +1,20 @@
+# @package _global_
+defaults:
+  - /data/nuscenes
+
+data:
+  map_layers: ['lane', 'road_segment','road_divider', 'lane_divider','ped_crossing','walkway','carpark_area']
+
+visualization:
+  keys: ${data.map_layers}
+
+model:
+  head:
+    outputs:
+      lane: [0, 1]
+      road_segment: [1, 2]
+      road_divider: [2, 3]
+      lane_divider: [3, 4]
+      ped_crossing: [4, 5]
+      walkway: [5, 6]
+      carpark_area: [6, 7]

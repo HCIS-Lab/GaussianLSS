@@ -1,0 +1,18 @@
+# @package _global_
+defaults:
+  - /data/nuscenes
+
+data:
+  vehicle: True
+
+visualization:
+  keys: ['vehicle']
+
+model:
+  head:
+    outputs:
+      vehicle: [0, 1]
+      vehicle_center: [1, 2]
+      vehicle_offset: [2, 4]
+
+key: vehicle

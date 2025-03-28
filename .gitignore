@@ -4,7 +4,7 @@ __pycache__/
 
 logs/
 outputs/
-data/
+/data/
 .ipynb_checkpoints
 .vscode
 .idea
