@@ -1,0 +1,11 @@
+*.pyc
+__pycache__/
+*.egg-info/
+
+logs/
+outputs/
+data/
+.ipynb_checkpoints
+.vscode
+.idea
+wandb

@@ -1,0 +1,15 @@
+efficientnet_pytorch==0.7.1
+einops==0.3.2
+fvcore==0.1.5.post20210825
+hydra-core==1.3.2
+matplotlib==3.5.3
+numpy==1.24.1
+nuscenes-devkit==1.1.11
+pillow==10.2.0
+pytorch-lightning==2.1.0
+timm==0.9.16
+tqdm==4.65.2
+wandb==0.15.5
+imgaug==0.4.0
+setuptools==60.2.0
+jupyter

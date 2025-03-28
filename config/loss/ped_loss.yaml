@@ -1,0 +1,20 @@
+center_weight: 2.0
+center:
+  _target_: GaussianLSS.losses.CenterLoss
+
+  min_visibility: ${min_visibility}
+  key: ped
+
+offset_weight:  0.1
+offset:
+  _target_: GaussianLSS.losses.OffsetLoss
+
+  min_visibility: ${min_visibility}
+  key: ped
+
+ped_weight: 1.0
+ped:
+  _target_: GaussianLSS.losses.BinarySegmentationLoss
+
+  key: ped
+  min_visibility: ${min_visibility}

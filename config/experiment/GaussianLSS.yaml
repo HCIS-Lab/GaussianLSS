@@ -1,0 +1,20 @@
+# @package _global_
+defaults:
+  - override /model: GaussianLSSModel # GaussianLSSModel GaussianIterLSSModel
+  - override /data: nuscenes_vehicle
+
+  - override /loss: vehicle_loss
+  - override /metrics: vehicle_metrics
+  - override /visualization: nuscenes_viz
+        
+data:
+  split_intrin_extrin: False
+  augment_img: True 
+  augment_bev: True
+#   map_layers: ['lane', 'road_segment', 'road_divider', 'lane_divider', 'ped_crossing','walkway','carpark_area']
+
+# visualization:
+#   map_key: ['lane', 'road_segment', 'road_divider', 'lane_divider', 'ped_crossing','walkway','carpark_area']
+
+val_only: False
+min_visibility: 0

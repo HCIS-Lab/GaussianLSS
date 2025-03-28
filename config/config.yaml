@@ -1,0 +1,61 @@
+defaults:
+  - _self_
+  - model: null
+  - data: nuscenes
+  - visualization: null
+
+  - loss: null
+  - metrics: null
+
+experiment:
+  project: GaussianLSS                                # wandb project
+  uuid: ${now:%Y_%m%d_%H%M%S}                         # model name
+  save_dir: ${hydra:runtime.cwd}/logs/                # log directory, will be created
+
+  seed: 2025
+  checkpoint_interval: 500
+  log_image_interval: 500
+  save_last: True
+
+loader:
+  train_batch_size: 4 # 8x3
+  val_batch_size: 4
+  num_workers: 4 # 4
+  pin_memory: True
+  prefetch_factor: 2
+
+# AdamW
+optimizer:
+  lr: 3e-4 # 3e-3
+  weight_decay: 1e-7 # 1e-5
+
+# OneCycleLR
+scheduler:
+  div_factor: 3                                       # starts at lr / 10
+  pct_start: 0.05                                      # reaches lr at 30% of total steps
+  final_div_factor: 20                                 # ends at lr / 10 / 10
+  max_lr: ${optimizer.lr}
+  total_steps: ${trainer.max_steps}
+  cycle_momentum: False
+  anneal_strategy: "linear"
+
+# lightning trainer
+trainer:
+  max_steps : 360000
+  log_every_n_steps: 40
+
+  devices: -1
+
+  accelerator: gpu
+  # gpus: -1
+  
+  precision: 32
+  limit_train_batches: 1.0
+  limit_val_batches: 1.0
+  check_val_every_n_epoch: 1
+  val_check_interval: 1.0
+  num_sanity_val_steps: 0
+  gradient_clip_val: 5.0
+  sync_batchnorm: False
+  # deterministic: False
+  # accumulate_grad_batches: 2
