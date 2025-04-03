@@ -1,6 +1,9 @@
 from typing import Iterable, Optional
 import torch
 import torch.nn as nn
+from torchvision.models.resnet import Bottleneck
+
+BottleneckBlock = lambda x: Bottleneck(x, x//4)
 
 class AlignRes(nn.Module):
     """Align resolutions of the outputs of the backbone."""
@@ -51,49 +54,39 @@ class PrepareChannel(nn.Module):
         in_channels=[256, 512, 1024, 2048],
         interm_c=128,
         out_c: Optional[int] = 128,
-        tail_mode="identity",
         depth_num=0,
     ):
         super().__init__()
-        assert tail_mode in ["identity", "conv2d"]
         assert depth_num != 0
 
         in_c = sum(in_channels)
-        self.layers = nn.Sequential(
+        self.feats = nn.Sequential(
             nn.Conv2d(in_c, interm_c, kernel_size=3, padding=1, bias=False),
-            nn.InstanceNorm2d(interm_c),
+            nn.BatchNorm2d(interm_c),
             nn.ReLU(inplace=True),
-            nn.Conv2d(interm_c, interm_c, kernel_size=3, padding=1, bias=False),
-            nn.InstanceNorm2d(interm_c),
-            nn.ReLU(inplace=True),
+            BottleneckBlock(interm_c),
+            BottleneckBlock(interm_c),
+            nn.Conv2d(interm_c, out_c, kernel_size=1, padding=0),
         )
-        self.depth_layers = nn.Sequential(
+        self.depth = nn.Sequential(
             nn.Conv2d(in_c, interm_c, kernel_size=3, padding=1),
-            nn.InstanceNorm2d(interm_c),
+            nn.BatchNorm2d(interm_c),
             nn.ReLU(inplace=True),
-            nn.Conv2d(interm_c, interm_c, kernel_size=3, padding=1),
-            nn.InstanceNorm2d(interm_c),
-            nn.ReLU(inplace=True),
+            BottleneckBlock(interm_c),
+            BottleneckBlock(interm_c),
             nn.Conv2d(interm_c, depth_num, kernel_size=1, padding=0)
         )
-        self.opacity_layers = nn.Sequential(
+        self.opacity = nn.Sequential(
             nn.Conv2d(in_c, interm_c, kernel_size=3, padding=1),
-            nn.InstanceNorm2d(interm_c),
+            nn.BatchNorm2d(interm_c),
             nn.ReLU(inplace=True),
-            nn.Conv2d(interm_c, interm_c, kernel_size=3, padding=1),
-            nn.InstanceNorm2d(interm_c),
-            nn.ReLU(inplace=True),
+            BottleneckBlock(interm_c),
+            BottleneckBlock(interm_c),
             nn.Conv2d(interm_c, 1, kernel_size=1, padding=0)
         )
-
-        if tail_mode == "identity":
-            self.tail = nn.Identity()
-        elif tail_mode == "conv2d":
-            # Used in SimpleBEV
-            self.tail = nn.Conv2d(interm_c, out_c, kernel_size=1, padding=0)
         
     def forward(self, x):
-        return self.tail(self.layers(x)), self.depth_layers(x), self.opacity_layers(x).sigmoid()
+        return self.feats(x), self.depth(x), self.opacity(x).sigmoid()
 
 class AGPNeck(nn.Module):
     """

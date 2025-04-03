@@ -1,6 +1,13 @@
-# <div align="center">**GaussianLSS - Toward Real-world BEV Perception: Depth Uncertainty Estimation via Gaussian Splatting**</div>
+# <div align="center">**GaussianLSS**</div>
 <div align="center"><img src="./images/Splatting.png" width="85%"></div>
-This is the official repository of CVPR'25 paper: GaussianLSS - Toward Real-world BEV Perception: Depth Uncertainty Estimation via Gaussian Splatting.
+
+This is the official repository of our paper: 
+
+[[Paper](https://arxiv.org/abs/2504.01957)] [[Project page](https://hcis-lab.github.io/GaussianLSS/)]
+
+> [**Toward Real-world BEV Perception: Depth Uncertainty Estimation via Gaussian Splatting**](https://arxiv.org/abs/2504.01957)<br>
+> [Shu-Wei Lu](https://nargoo0328.github.io/shu_wei_lu/), [Yi-Hsuan Tsai](https://sites.google.com/site/yihsuantsai/), [Yi-Ting Chen](https://sites.google.com/site/yitingchen0524/home).<br> 
+> [CVPR 2025](https://cvpr.thecvf.com/Conferences/2025)
 
 # ⚙️ Installation
 Create the environment with conda:
@@ -42,6 +49,10 @@ python scripts/generate_data.py
 ```
 This packs 3D bounding boxes into individual files with ego poses. It would take within 10 minutes.
 
+If you want to run on a subset of data, you could download the v1.0-mini version of nuScenes dataset and generate labels with:
+```bash
+python scripts/generate_data.py data.version=v1.0-mini
+```
 # 🚀 Training
 To train GaussianLSS with vehicle class only:
 ```bash
@@ -68,8 +79,15 @@ Run visualize.ipynb to create a gif visualization like this:
 <img src="./images/predictions.gif" width="80%">
 </div>
 
+# Checkpoints
+
+| Backbone | Resolution | Visibility | IoU |
+| -------- | --------   | --------   | --- |
+| Eff-b4   | 224x480    | 1          | [38.3](https://github.com/HCIS-Lab/GaussianLSS/releases/download/checkpoints/effb4_224_480_1.ckpt) |
+| Eff-b4   | 224x480    | 2          | [42.8](https://github.com/HCIS-Lab/GaussianLSS/releases/download/checkpoints/effb4_224_480_2.ckpt) |
+
 # TODOs
-- [ ] Add checkpoints.
+- [x] Add checkpoints.
 - [ ] Add det3d code.
 
 # 🙏 Acknowledgements

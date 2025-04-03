@@ -1,7 +1,7 @@
 defaults:
   - img_params: scale_0_3
 
-dataset: 'nuscenes_generated'           # do not modify :)
+dataset: 'nuscenes_generated'           
 # used to get_split
 version: 'v1.0-trainval'                # 'v1.0-mini' for debugging trainval
 dataset_dir: ./data/nuscenes

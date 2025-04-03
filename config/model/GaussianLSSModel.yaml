@@ -1,4 +1,4 @@
-_target_: GaussianLSS.model.GaussianLSS.GaussianLSS # GaussianSpherical
+_target_: GaussianLSS.model.GaussianLSS.GaussianLSS
 
 embed_dims: 128
 error_tolerance: 0.5
@@ -12,6 +12,7 @@ backbone:
   image_height: ${data.image.h}
   image_width: ${data.image.w}
   return_list: ["reduction_3", "reduction_4"]
+  # checkpoint: True
 
 neck:
   _target_: GaussianLSS.model.backbones.agp.AGPNeck
@@ -27,11 +28,11 @@ neck:
     depth_num: ${model.depth_num} 
     interm_c: 256
     out_c: ${model.embed_dims}
-    tail_mode: conv2d
     
 decoder:
   _target_: GaussianLSS.model.decoder.BevEncode
-  in_channels: ${model.embed_dims}  
+  inC: ${model.embed_dims}  
+  outC: ${model.embed_dims}  
 
 head:
   _target_: GaussianLSS.model.decoder.SegHead

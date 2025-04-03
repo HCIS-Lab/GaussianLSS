@@ -24,7 +24,6 @@ class GaussianLSS(nn.Module):
             backbone,
             head,
             neck,
-            encoder=None,
             decoder=nn.Identity(),
             error_tolerance=1.0,
             depth_num=64,
@@ -47,7 +46,6 @@ class GaussianLSS(nn.Module):
         self.depth_start = depth_start
         self.depth_max = depth_max
         self.gs_render = GaussianRenderer(embed_dims, opacity_filter)
-        self.bev_refine = encoder
     
         self.error_tolerance = error_tolerance
         self.img_h = img_h
@@ -158,12 +156,12 @@ class GaussianRenderer(nn.Module):
         self.embed_dims = embed_dims
         self.threshold = threshold
 
-    def forward(self, features, means3D, cov3D, opacities):#, orth_features, orth_means):
+    def forward(self, features, means3D, cov3D, opacities):
         """
-        features: b G d*stages
+        features: b G d
         means3D: b G 3
         uncertainty: b G 6
-        opacities: b G 1*stages
+        opacities: b G 1
         """ 
         b = features.shape[0]
         device = means3D.device
@@ -186,7 +184,7 @@ class GaussianRenderer(nn.Module):
             )
             bev_out.append(rendered_bev)
             
-        x = torch.stack(bev_out, dim=0)
+        x = torch.stack(bev_out, dim=0) # b d h w
         num_gaussians = (mask.detach().float().sum(1)).mean().cpu()
 
         return x, num_gaussians
@@ -207,7 +205,7 @@ class GaussianRenderer(nn.Module):
             scale_modifier=1,
             viewmatrix=self.viewpoint_camera.world_view_transform.to(device),
             projmatrix=self.viewpoint_camera.full_proj_transform.to(device),
-            sh_degree=0,  # No SHs used for random Gaussians
+            sh_degree=0,  # No SHs used 
             campos=self.viewpoint_camera.camera_center.to(device),
             prefiltered=False,
             debug=False
@@ -218,70 +216,6 @@ class GaussianRenderer(nn.Module):
     def set_render_scale(self, h, w):
         self.viewpoint_camera.set_size(h, w)
         self.viewpoint_camera.set_transform(h, w)
-
-    @torch.no_grad()
-    def forward_part_gaussians(self, 
-            features, 
-            means3D, 
-            cov3D, 
-            # direction_vector, 
-            opacities, 
-            shape, 
-            cam_index, 
-            y_range=None, 
-            x_range=None, 
-            # orth_features, 
-            # orth_means
-        ):
-        
-        """
-        features: (b n) d h w
-        means3D: (b n) h w 3
-        uncertainty: (b n) h w
-        direction_vector: (b n) h w 3
-        opacities: (b n) h w 1
-        """ 
-
-        b, n = shape
-        device = means3D.device
-        self.set_Rasterizer(device)
-        # cov3D = cov3D.flatten(-2, -1)
-        # cov3D = torch.cat((cov3D[..., 0:3], cov3D[..., 4:6], cov3D[..., 8:9]), dim=-1)
-        # features = rearrange(features, '(b n) d h w -> b (n h w) d', b=b, n=n).squeeze(0)
-        # means3D = rearrange(means3D, '(b n) h w d-> b (n h w) d', b=b, n=n).squeeze(0)
-        # cov3D = rearrange(cov3D, '(b n) h w d -> b (n h w) d',b=b, n=n).squeeze(0)
-        # opacities = rearrange(opacities, '(b n) d h w -> b (n h w) d', b=b, n=n).squeeze(0)
-
-        if y_range is not None:
-            features = rearrange(features[cam_index, :, y_range[0]:y_range[1], x_range[0]:x_range[1]], 'd h w -> 1 (h w) d')
-            means3D = rearrange(means3D[cam_index, y_range[0]:y_range[1], x_range[0]:x_range[1]], 'h w d-> 1 (h w) d')
-            # uncertainty = rearrange(uncertainty[cam_index, y_range[0]:y_range[1], x_range[0]:x_range[1]], 'h w -> 1 (h w)')
-            cov3D = rearrange(cov3D[cam_index, y_range[0]:y_range[1], x_range[0]:x_range[1]], 'h w d-> 1 (h w) d')
-            # direction_vector = rearrange(direction_vector[cam_index, y_range[0]:y_range[1], x_range[0]:x_range[1]], 'h w d-> 1 (h w) d')
-            opacities = rearrange(opacities[cam_index, :, y_range[0]:y_range[1], x_range[0]:x_range[1]], 'd h w -> 1 (h w) d')
-        else:
-            # mask = (opacities[cam_index, ...] > self.threshold).view(1, -1)
-            features = rearrange(features[cam_index], 'd h w -> 1 (h w) d')# [mask][None]
-            means3D = rearrange(means3D[cam_index], 'h w d -> 1 (h w) d')#[mask][None]
-            cov3D = rearrange(cov3D[cam_index], 'h w d-> 1 (h w) d')#[mask][None]
-            opacities = rearrange(opacities[cam_index], 'd h w -> 1 (h w) d')#[mask][None]
-
-        mask = (opacities > self.threshold)[0].squeeze(1)
-        bev_out = []
-        for i in range(b):
-            rendered_bev, _ = self.rasterizer(
-                means3D=means3D[i][mask],
-                means2D=None,
-                shs=None,  # No SHs used
-                colors_precomp=features[i][mask],
-                opacities=opacities[i][mask],
-                scales=None,
-                rotations=None,
-                cov3D_precomp=cov3D[i][mask],
-            )
-            bev_out.append(rendered_bev)
-    
-        return torch.stack(bev_out, dim=0), None # orthogonal_uncertainty
 
 @torch.no_grad()
 def get_pixel_coords_3d(coords_d, depth, lidar2img, img_h=224, img_w=480, depth_num=64, depth_start=1, depth_max=61):
