@@ -86,9 +86,12 @@ Run visualize.ipynb to create a gif visualization like this:
 | Eff-b4   | 224x480    | 1          | [38.3](https://github.com/HCIS-Lab/GaussianLSS/releases/download/checkpoints/effb4_224_480_1.ckpt) |
 | Eff-b4   | 224x480    | 2          | [42.8](https://github.com/HCIS-Lab/GaussianLSS/releases/download/checkpoints/effb4_224_480_2.ckpt) |
 
+# 3D Detection
+Please refer to `./detection3d`.
+
 # TODOs
 - [x] Add checkpoints.
-- [ ] Add det3d code.
+- [x] Add det3d code.
 
 # 🙏 Acknowledgements
 This implementation is mainly based on:

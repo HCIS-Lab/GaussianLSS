@@ -12,7 +12,8 @@ class Up(nn.Module):
             nn.Conv2d(in_channels, out_channels, kernel_size=3, padding=1, bias=False),
             nn.BatchNorm2d(out_channels),
             nn.ReLU(inplace=True),
-            BottleneckBlock(out_channels)
+            BottleneckBlock(out_channels),
+            BottleneckBlock(out_channels),
         )
 
     def forward(self, x1, x2):
@@ -31,17 +32,22 @@ class BevEncode(nn.Module):
             nn.ReLU(inplace=True)
         )
 
-        self.enc1 = BottleneckBlock(128) 
+        self.enc1 = nn.Sequential(
+            BottleneckBlock(128),
+            BottleneckBlock(128),
+        )
         self.enc2 = nn.Sequential(
             nn.Conv2d(128, 128, 3, stride=2, padding=1, bias=False), 
             nn.BatchNorm2d(128),
             nn.ReLU(inplace=True),
+            BottleneckBlock(128),
             BottleneckBlock(128),
         )
         self.enc3 = nn.Sequential(
             nn.Conv2d(128, 256, 3, stride=2, padding=1, bias=False),  
             nn.BatchNorm2d(256),
             nn.ReLU(inplace=True),
+            BottleneckBlock(256),
             BottleneckBlock(256),
         )
 

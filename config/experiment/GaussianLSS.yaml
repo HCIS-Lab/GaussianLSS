@@ -13,4 +13,4 @@ data:
   augment_bev: True
 
 val_only: False
-min_visibility: 0
+min_visibility: 2
