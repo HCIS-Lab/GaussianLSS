@@ -106,10 +106,12 @@ Thanks to these great open-source implementations!
 # 📚 Bibtex
 If you find this work helpful, please consider citing our paper:
 ```bash
-@inproceedings{lu2025GaussianLSS,
-        author    = {Shu-Wei Lu and Yi-Hsuan Tsai and Yi-Ting Chen},
-        title     = {Toward Real-world BEV Perception: Depth Uncertainty Estimation via Gaussian Splatting},
-        booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
-        year      = {2025}
+@InProceedings{Lu_2025_CVPR,
+    author    = {Lu, Shu-Wei and Tsai, Yi-Hsuan and Chen, Yi-Ting},
+    title     = {Toward Real-world BEV Perception: Depth Uncertainty Estimation via Gaussian Splatting},
+    booktitle = {Proceedings of the Computer Vision and Pattern Recognition Conference (CVPR)},
+    month     = {June},
+    year      = {2025},
+    pages     = {17124-17133}
 }
 ```
