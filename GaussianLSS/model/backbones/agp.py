@@ -66,7 +66,6 @@ class PrepareChannel(nn.Module):
             nn.ReLU(inplace=True),
             BottleneckBlock(interm_c),
             BottleneckBlock(interm_c),
-            BottleneckBlock(interm_c),
             nn.Conv2d(interm_c, out_c, kernel_size=1, padding=0),
         )
         self.depth = nn.Sequential(
@@ -75,14 +74,12 @@ class PrepareChannel(nn.Module):
             nn.ReLU(inplace=True),
             BottleneckBlock(interm_c),
             BottleneckBlock(interm_c),
-            BottleneckBlock(interm_c),
             nn.Conv2d(interm_c, depth_num, kernel_size=1, padding=0)
         )
         self.opacity = nn.Sequential(
             nn.Conv2d(in_c, interm_c, kernel_size=3, padding=1),
             nn.BatchNorm2d(interm_c),
             nn.ReLU(inplace=True),
-            BottleneckBlock(interm_c),
             BottleneckBlock(interm_c),
             BottleneckBlock(interm_c),
             nn.Conv2d(interm_c, 1, kernel_size=1, padding=0)
